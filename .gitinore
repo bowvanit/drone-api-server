@@ -1,5 +1,0 @@
-Bash
-
-touch .gitignore
-/node_modules
-.env
