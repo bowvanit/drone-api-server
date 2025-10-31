@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors()); 
-app.use(express.static('./Assignment_2'));
+app.use(express.static('../Assignment_2'));
 
 // GET /configs/:droneId
 app.get("/configs/:droneId", async (req, res) => {
