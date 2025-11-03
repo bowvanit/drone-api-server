@@ -1,6 +1,6 @@
 # Assignment #2 Create a Web Frontend with HTML, CSS, and JavaScript
 
-โปรเจกต์นี้คือส่วนหน้า (Frontend) ที่สร้างด้วย HTML, CSS, และ JavaScript โดยทำหน้าที่เป็นอินเทอร์เฟซผู้ใช้เพื่อโต้ตอบกับ Drone API Server (ที่สร้างในโปรเจกต์ก่อนหน้า) เพื่อดูข้อมูลการตั้งค่าโดรน บันทึก Log และดูรายการ Log ที่ถูกบันทึกไว้
+โปรเจกต์นี้คือส่วนหน้า (Frontend) ที่สร้างด้วย HTML, CSS, และ JavaScript โดยทำหน้าที่เป็นอินเทอร์เฟซผู้ใช้เพื่อโต้ตอบกับ Drone API Server (ที่สร้างในAssidnment_1) เพื่อดูข้อมูลการตั้งค่าโดรน บันทึก Log และดูรายการ Log ที่ถูกบันทึกไว้
 
 ## Features
 * **View Drone Configuration:** แสดงข้อมูลการตั้งค่าของโดรนที่กำหนดไว้ (เช่น ชื่อโดรน แสง ประเทศ และเงื่อนไข) โดยการเรียกใช้ Endpoint `/configs/:droneId` ของ API Server
@@ -26,8 +26,11 @@
 | `loadLogs(page = 1)` | ดึงรายการ Log ตามหมายเลขหน้า และสร้างตารางแสดงผลรวมถึงส่วนควบคุม Pagination ใน `logs_view.html` |
 
 ## How to Run
-```bash
-npm install
-npm run dev
-```
+โปรเจกต์นี้ถูกออกแบบให้ Deploy เป็น **Web Service** เดียวบน Render โดย API Server จะทำหน้าที่เสิร์ฟ Static Files ของ Frontend ด้วย
+
+### 1. Prerequisites
+
+* **Node.js** และ **npm**
+* **GitHub Repository:** โค้ดทั้งหมด (รวมถึงไฟล์จาก `Assignment_2` เช่น `index.html`, `app.js`) ถูกจัดเก็บใน GitHub Repository เดียวกัน
+* **Render Account:** บัญชีผู้ใช้บน [Render.com](https://render.com/)
 Runs on: http://localhost:3000
