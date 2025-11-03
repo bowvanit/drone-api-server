@@ -59,16 +59,18 @@ Here is an example of the **Temperature Log Form** interface:
 
 ---
 
-## How to Run the Project Locally
+## How to Run the Project
 
-โปรเจกต์นี้ต้องรัน API Server (Backend) ก่อน เพื่อให้ Frontend สามารถเรียกใช้งานได้
 
-### 1. Run Backend (API Server)
-
-1.  เปลี่ยนไดเรกทอรีไปยังโฟลเดอร์ของ Backend (สมมติชื่อ `assignment1_api`):
+### Run Frontend
 
 ```bash
-cd assignment1_api
+cd Assignment_1
+npm install
+npm node server.js
+```
+
+Access on https://drone-api-server-3r7c.onrender.com
 
 ## Developer
 
