@@ -42,4 +42,4 @@ npm install
 npm node server.js
 ```
 
-Server runs at: http://localhost:3000
+Server runs at: http://localhost:5500
