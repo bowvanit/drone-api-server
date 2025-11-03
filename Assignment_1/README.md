@@ -1,6 +1,6 @@
 # Assignment #1 Create an API Server with Node.js & Express.js
 
-นี่คือเซิร์ฟเวอร์ API ส่วนหลังบ้าน (backend) ที่พัฒนาด้วย **Express.js**
+เซิร์ฟเวอร์ API ส่วนหลังบ้าน (backend) ที่พัฒนาด้วย **Express.js**
 มีหน้าที่ให้บริการเส้นทาง (routes) สำหรับเรียกดูข้อมูลการตั้งค่าโดรน (configuration) และจัดการบันทึกอุณหภูมิ (temperature logs)
 
 ## ✨ คุณสมบัติ (Features)
@@ -28,15 +28,14 @@
   "drone_id": 66010725,
   "drone_name": "Vortex",
   "country": "Philippines"
+  "celsius": 29
 }
 
 ## Run the server
 
 ```bash
-
 npm install
-
 npm run dev
-
 ```
+
 Server runs at: http://localhost:5500
