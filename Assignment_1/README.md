@@ -1,14 +1,16 @@
 # Assignment #1 Create an API Server with Node.js & Express.js
 
-เซิร์ฟเวอร์ API ส่วนหลังบ้าน (backend) ที่พัฒนาด้วย **Express.js**
-มีหน้าที่ให้บริการเส้นทาง (routes) สำหรับเรียกดูข้อมูลการตั้งค่าโดรน (configuration) และจัดการบันทึกอุณหภูมิ (temperature logs)
+โปรเจกต์นี้คือ API Server ที่สร้างขึ้นด้วย Node.js และเฟรมเวิร์ก Express.js เพื่อทำหน้าที่เป็นเกตเวย์ในการดึงข้อมูลการตั้งค่า (Configuration) และจัดการบันทึกข้อมูล (Logs) สำหรับโดรน (Drone) โดยใช้ node-fetch สำหรับการเรียก API ภายนอก และ dotenv ในการจัดการตัวแปรสภาพแวดล้อม (Environment Variables)
 
 ## ✨ คุณสมบัติ (Features)
 
-* เรียกดูข้อมูลการตั้งค่าโดรน (Configuration) และสถานะ (Condition) จาก **Google Script API** (External API).
-* สร้างและดูบันทึกอุณหภูมิ (Temperature logs) โดยใช้ **PocketBase** เป็นฐานข้อมูล.
-* รองรับ **การแบ่งหน้า (Pagination)** และ **การจัดเรียง (Sorting)** ตามวันที่สร้าง (Creation date) สำหรับข้อมูล Log.
-* รองรับการจัดการ **CORS** เพื่อให้สามารถเชื่อมต่อกับ Frontend ได้.
+*API Gateway: ทำหน้าที่เป็นตัวกลางในการเชื่อมต่อและดึงข้อมูลจาก External Config API และ External Log API.*
+*การจัดการ Configuration: สามารถดึงข้อมูลการตั้งค่าเฉพาะของโดรนตาม droneId ที่ร้องขอ*
+*การจัดการ Logs:*
+* ดึงรายการบันทึก (Logs) ของโดรนโดยใช้ DRONE_ID ที่กำหนดไว้ใน .env และรองรับการแบ่งหน้า (Pagination)*
+* สามารถบันทึกรายการ Log ใหม่ลงในฐานข้อมูล*
+* Cross-Origin Resource Sharing (CORS): เปิดใช้งาน CORS เพื่ออนุญาตให้ไคลเอนต์จากโดเมนอื่นสามารถเข้าถึง API ได้
+* Static Files Serving: เสิร์ฟไฟล์คงที่ (Static Files) จากไดเรกทอรี ../Assignment_2
 
 ---
 
@@ -16,8 +18,8 @@
 
 | Method | Routes | Description |
 | :--- | :--- | :--- |
-| `GET` | `/configs/:droneId` | รับข้อมูลการตั้งค่าและสถานะ (Condition) ของโดรน |
-| `GET` | `/logs/:droneId` | รับข้อมูลบันทึกอุณหภูมิของโดรน (Logs) |
+| `GET` | `/configs/:droneId` | ดึงข้อมูลการตั้งค่าเฉพาะของโดรน droneId |
+| `GET` | `/logs` | รับข้อมูลบันทึกอุณหภูมิของโดรน (Logs) |
 | `POST` | `/logs` | สร้างบันทึกอุณหภูมิใหม่ (New drone log) |
 ---
 
@@ -28,8 +30,8 @@
 {
   "drone_id": 66010725,
   "drone_name": "Vortex",
-  "country": "Philippines"
-  "celsius": 29
+  "country": "Philippines",
+  "celsius": 32.5
 }
 ```
 
@@ -37,7 +39,7 @@
 
 ```bash
 npm install
-npm run dev
+npm node server.js
 ```
 
-Server runs at: http://localhost:5500
+Server runs at: http://localhost:3000
