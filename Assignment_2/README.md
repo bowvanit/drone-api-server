@@ -25,12 +25,10 @@
 | `submitLog()` | รวบรวมข้อมูลจากฟอร์มใน `log_form.html` และส่ง Log ใหม่ไปยัง API |
 | `loadLogs(page = 1)` | ดึงรายการ Log ตามหมายเลขหน้า และสร้างตารางแสดงผลรวมถึงส่วนควบคุม Pagination ใน `logs_view.html` |
 
-## How to Run
-โปรเจกต์นี้ถูกออกแบบให้ Deploy เป็น **Web Service** เดียวบน Render โดย API Server จะทำหน้าที่เสิร์ฟ Static Files ของ Frontend ด้วย
+## Run the server
 
-### 1. Prerequisites
-
-* **Node.js** และ **npm**
-* **GitHub Repository:** โค้ดทั้งหมด (รวมถึงไฟล์จาก `Assignment_2` เช่น `index.html`, `app.js`) ถูกจัดเก็บใน GitHub Repository เดียวกัน
-* **Render Account:** บัญชีผู้ใช้บน [Render.com](https://render.com/)
+```bash
+npm install
+npm node server.js
+```
 Runs on: http://localhost:3000
