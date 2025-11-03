@@ -40,36 +40,29 @@ app.get("/configs/:droneId", async (req, res) => {
 
 // GET /logs 
 app.get("/logs", async (req, res) => {
-    const droneId = req.query.drone_id; 
-    const limit = parseInt(req.query.limit) || 12; 
-    const page = parseInt(req.query.page) || 1; 
-    const sort = req.query.sort || '-created'; 
-
-    if (!droneId) {
-        return res.status(400).json({ error: "Missing drone_id query parameter." });
-    }
-
-    const offset = (page - 1) * limit;
+    const { page = 1, limit = 12 } = req.query;
+    const filter = `drone_id='${process.env.DRONE_ID}'`;
 
     try {
-        const response = await fetch(
-            `${process.env.LOG_URL}?filter=(drone_id="${droneId}")&sort=${sort}&limit=${limit}&offset=${offset}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.LOG_API_TOKEN}`
-                }
+        const pbUrl = `${process.env.LOG_URL}?sort=-created&filter=${filter}&page=${page}&perPage=${limit}`;
+        
+        const response = await fetch(pbUrl, {
+            headers: {
+                Authorization: `Bearer ${process.env.LOG_API_TOKEN}`
             }
-        );
+        });
 
         const data = await response.json();
-        
-        if (!data.items) {
-             return res.json([]);
+
+        if (!response.ok) {
+        return res.status(response.status).json(data);
+        }
+
+        if (!data || !data.items) {
+            return res.json({ items: [], totalPages: 0, totalItems: 0, currentPage: 1 });
         }
         
-        const limitedItems = data.items.slice(0, limit); 
-        
-        const logs = limitedItems.map(log => ({ 
+        const logs = data.items.map(log => ({ 
             drone_id: log.drone_id,
             drone_name: log.drone_name,
             created: log.created,
@@ -77,8 +70,15 @@ app.get("/logs", async (req, res) => {
             celsius: log.celsius
         }));
         
-        res.json(logs);
-    } catch (error) {
+        
+        res.json({
+            items: logs, 
+            totalPages: data.totalPages, 
+            totalItems: data.totalItems,
+            currentPage: data.page
+        });
+
+        } catch (error) {
         return res.status(500).json({ error: "Failed to fetch log data." });
     }
 });
