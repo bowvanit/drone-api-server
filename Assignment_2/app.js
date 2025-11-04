@@ -1,27 +1,27 @@
 const API_BASE_URL = 'https://drone-api-server-3r7c.onrender.com';
-const DRONE_ID = '66010725'; 
+const DRONE_ID = '66010725';
 
-const LOGS_PER_PAGE = 12; 
+const LOGS_PER_PAGE = 12;
 let currentPage = 1;
 
 
 async function loadAndDisplayConfig() {
     const envDroneIdEl = document.getElementById('env-drone-id');
-    if(envDroneIdEl) envDroneIdEl.textContent = DRONE_ID; 
+    if (envDroneIdEl) envDroneIdEl.textContent = DRONE_ID;
 
     try {
 
         const response = await fetch(`${API_BASE_URL}/configs/${DRONE_ID}`);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`API Error ${response.status}: ${errorText}`);
         }
-        
+
         const config = await response.json();
 
         sessionStorage.setItem('droneConfig', JSON.stringify(config));
- 
+
         const configIdEl = document.getElementById('config-id');
         if (configIdEl) configIdEl.textContent = config.drone_id || 'N/A';
 
@@ -37,14 +37,14 @@ async function loadAndDisplayConfig() {
         const errorHintEl = document.getElementById('error-hint');
         if (errorHintEl) errorHintEl.classList.add('hidden');
 
-        return config; 
+        return config;
     } catch (error) {
         console.error("Failed to load config:", error);
         const errorHintEl = document.getElementById('error-hint');
         if (errorHintEl) {
             errorHintEl.classList.remove('hidden');
             const errorTextEl = errorHintEl.querySelector('#error-text');
-            if(errorTextEl) errorTextEl.textContent = error.message;
+            if (errorTextEl) errorTextEl.textContent = error.message;
         }
         throw error;
     }
@@ -62,10 +62,10 @@ async function postLogData(logData) {
             const errorText = await response.text();
             throw new Error(`API Error ${response.status}: ${errorText}`);
         }
-        
+
         const result = await response.json();
 
-        saveLastSubmittedDegree(logData.celsius); 
+        saveLastSubmittedDegree(logData.celsius);
 
         return result;
     } catch (error) {
@@ -74,7 +74,7 @@ async function postLogData(logData) {
 }
 
 async function submitLogForm(event) {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const submitBtn = document.getElementById('submit-button');
     const celsiusInput = document.getElementById('celsius-input');
@@ -89,7 +89,7 @@ async function submitLogForm(event) {
 
     try {
         const config = JSON.parse(configString);
-        const celsiusStr = celsiusInput.value.trim(); 
+        const celsiusStr = celsiusInput.value.trim();
 
         if (celsiusStr === "") {
             messageBox.className = "p-3 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg text-sm";
@@ -97,9 +97,9 @@ async function submitLogForm(event) {
             celsiusInput.focus();
             return;
         }
-        
-        const celsius = parseFloat(celsiusStr); 
-        
+
+        const celsius = parseFloat(celsiusStr);
+
         if (isNaN(celsius) || !Number.isFinite(celsius)) {
             messageBox.className = "p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm";
             messageBox.textContent = "Error: อุณหภูมิต้องเป็นตัวเลขที่ถูกต้อง (รองรับทศนิยมและค่าลบ)";
@@ -112,18 +112,18 @@ async function submitLogForm(event) {
             drone_id: config.drone_id,
             drone_name: config.drone_name,
             country: config.country,
-            celsius: celsius 
+            celsius: celsius
         };
 
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> กำลังส่งข้อมูล...';
-        
+
         await postLogData(logData);
 
         messageBox.className = "p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-sm";
         messageBox.textContent = `✅ ส่ง Log สำเร็จ! อุณหภูมิ: ${celsius}°C`;
-        celsiusInput.value = ''; 
-        
+        celsiusInput.value = '';
+
     } catch (error) {
         console.error("Submission failed:", error);
         messageBox.className = "p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm";
@@ -140,14 +140,14 @@ function initLogForm() {
     if (configString) {
         config = JSON.parse(configString);
     }
-    
-    const formIdEl = document.getElementById('form-drone-id'); 
-        if (formIdEl) formIdEl.textContent = config.drone_id;
-    const formNameEl = document.getElementById('form-drone-name'); 
-        if (formNameEl) formNameEl.textContent = config.drone_name;
-    const formCountryEl = document.getElementById('form-country'); 
-        if (formCountryEl) formCountryEl.textContent = config.country;
-    
+
+    const formIdEl = document.getElementById('form-drone-id');
+    if (formIdEl) formIdEl.textContent = config.drone_id;
+    const formNameEl = document.getElementById('form-drone-name');
+    if (formNameEl) formNameEl.textContent = config.drone_name;
+    const formCountryEl = document.getElementById('form-country');
+    if (formCountryEl) formCountryEl.textContent = config.country;
+
     const logForm = document.getElementById('log-form');
     if (logForm) {
         logForm.addEventListener('submit', submitLogForm);
@@ -161,16 +161,16 @@ async function fetchAndDisplayLogs(page) {
     if (tableBody) tableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-500 font-medium"><i class="fas fa-spinner fa-spin mr-2"></i> กำลังโหลดข้อมูล...</td></tr>`;
     if (controls) controls.innerHTML = '';
 
-    currentPage = page; 
+    currentPage = page;
 
     try {
         const response = await fetch(`${API_BASE_URL}/logs?page=${page}&limit=${LOGS_PER_PAGE}`);
-        
+
         if (!response.ok) {
             throw new Error(`API Error ${response.status}: ${await response.text()}`);
         }
-        
-        const data = await response.json(); 
+
+        const data = await response.json();
         const logs = data.items;
         const totalPages = data.totalPages || 1;
         currentPage = data.currentPage || 1;
@@ -180,9 +180,9 @@ async function fetchAndDisplayLogs(page) {
             if (tableBody) tableBody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-gray-500 font-medium"><i class="fas fa-info-circle mr-2"></i> ไม่พบ Log ข้อมูล</td></tr>`;
         } else {
             logs.forEach(log => {
-                const createdDate = new Date(log.created).toLocaleString('th-TH', { 
-                    year: 'numeric', month: 'short', day: 'numeric', 
-                    hour: '2-digit', minute: '2-digit', second: '2-digit' 
+                const createdDate = new Date(log.created).toLocaleString('th-TH', {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
                 });
 
                 const newRow = tableBody.insertRow();
@@ -211,7 +211,7 @@ function updatePaginationControls(totalPages) {
     if (!controls) return;
 
 
-    
+
     controls.innerHTML = `
         <button id="prev-page-btn" class="px-4 py-2 mr-3 rounded-lg font-bold transition duration-300 ${currentPage === 1 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-sky-500 text-white hover:bg-sky-600'}" ${currentPage === 1 ? 'disabled' : ''}>
             <i class="fas fa-arrow-left mr-1"></i> Prev
@@ -233,7 +233,7 @@ function updatePaginationControls(totalPages) {
 function changePage(delta) {
     const newPage = currentPage + delta;
     // ตรวจสอบว่าไม่เกินหน้าแรก (1)
-    if (newPage >= 1) { 
+    if (newPage >= 1) {
         fetchAndDisplayLogs(newPage);
     }
 }
@@ -249,7 +249,7 @@ function displayLastSubmittedDegree() {
 
     if (lastDegree && displayEl && degreeEl) {
         degreeEl.textContent = lastDegree;
-        displayEl.classList.remove('hidden'); 
+        displayEl.classList.remove('hidden');
     }
 }
 
@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
 
     if (path.includes('index.html') || path.includes('config.html')) {
-        loadAndDisplayConfig(); 
+        loadAndDisplayConfig();
     }
 
     else if (path.includes('log_form.html')) {
@@ -267,15 +267,15 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch((error) => {
                 console.error("Critical: Config load failed for Log Form. Form data may be incomplete.", error);
-                initLogForm(); 
+                initLogForm();
             });
-    } 
+    }
 
     else if (path.includes('logs_view.html') || path.includes('logs.html')) {
         loadAndDisplayConfig()
             .then(() => {
-                displayLastSubmittedDegree(); 
-                fetchAndDisplayLogs(1); 
+                displayLastSubmittedDegree();
+                fetchAndDisplayLogs(1);
             })
             .catch((error) => {
                 console.error("Critical: Failed to load config, cannot fetch logs.", error);
