@@ -29,6 +29,6 @@
 
 ```bash
 npm install
-npm node server.js
+npm npm run dev
 ```
 Runs on: http://localhost:3000
