@@ -29,6 +29,6 @@
 
 ```bash
 npm install
-npm npm run dev
+npm npm start
 ```
 Runs on: http://localhost:3000
