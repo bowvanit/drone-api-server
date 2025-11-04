@@ -39,7 +39,7 @@
 
 ```bash
 npm install
-npm npm run dev
+npm npm start
 ```
 
 Server runs at: http://localhost:5500
